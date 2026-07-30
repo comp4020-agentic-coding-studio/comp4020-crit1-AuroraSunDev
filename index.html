@@ -3,22 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>COMP4020 prototype</title>
+    <title>GO THROUGH IT // a shrine</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header>
       <nav aria-label="Primary">
-        <a href="./">Home</a>
+        <a href="./index.html">HOME</a>
+        <a href="./sentence.html">THE SENTENCE</a>
+        <a href="./about.html">WHY THIS ONE</a>
+        <a href="./guestbook.html">GUESTBOOK</a>
       </nav>
     </header>
+
     <main>
-      <h1>COMP4020 prototype</h1>
-      <p data-testid="intro">
-        Replace this with your prototype. This week's brief is on the course website;
-        <code>spec/README.md</code> explains how the checks in this repo relate to it.
+      <h1>GO THROUGH IT</h1>
+
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          GO RIGHT THROUGH IT ★ DON'T AVOID IT ★ FEEL EVERY THING ★ GET OUT THE OTHER END ★ GO
+          RIGHT THROUGH IT ★ DON'T AVOID IT ★ FEEL EVERY THING ★ GET OUT THE OTHER END ★
+        </div>
+      </div>
+
+      <p class="lede">
+        Welcome to a small shrine on the World Wide Web. It is built around one sentence I keep
+        coming back to. This site has three other rooms: what the sentence actually says, why it
+        matters to me, and a guestbook, because it is not a real old website without one.
       </p>
+
+      <ul class="linklist">
+        <li>
+          <a class="tile tile-blue" href="./sentence.html">READ THE SENTENCE &rarr;</a>
+        </li>
+        <li>
+          <a class="tile tile-red" href="./about.html">WHY THIS ONE &rarr;</a>
+        </li>
+        <li>
+          <a class="tile tile-yellow" href="./guestbook.html">SIGN THE GUESTBOOK &rarr;</a>
+        </li>
+      </ul>
+
+      <p class="stamp">BEST VIEWED AT ANY RESOLUTION. NO COOKIES. NO TRACKING. JUST HTML.</p>
     </main>
-    <script type="module" src="./main.ts"></script>
+
+    <footer>
+      <p>BUILT WITH PURE HTML &amp; CSS. NO FRAMEWORK. NO JAVASCRIPT. NO MERCY.</p>
+    </footer>
   </body>
 </html>
