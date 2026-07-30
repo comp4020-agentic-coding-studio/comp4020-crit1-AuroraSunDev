@@ -1,9 +1,5 @@
 # Process overview
 
-<!-- TEMPLATE: this file is a shape to fill in, not a form. Replace everything
-     in it with your own overview, and delete this comment — `pnpm
-     check:evidence` will remind you if it's still here. -->
-
 A reading-guide to how the work came together --- a map to your process, not an
 essay about it. Markers read this file and follow its citations; they don't
 trawl the repo for evidence you didn't point at, so if a moment mattered, cite
@@ -15,60 +11,42 @@ is the requirement, and each brief adds its own word count and moment count.
 
 ## What I built
 
-One paragraph: the thing, and the idea behind it.
+A four-page shrine to one sentence I keep coming back to ("go right through
+it... and then get out the other end"), built in a 90s-brutalism style ---
+thick black borders, hard drop shadows, a scrolling marquee, blue/yellow/red
+throughout. It's pure HTML and CSS: no JavaScript, no bundler.
 
 ## The moments that mattered
 
-Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
-list short so each moment has room to do all four jobs:
+1. **The template ships Vite + TypeScript by default; the spec doesn't allow
+   it.** C1's published spec says "built with plain HTML and CSS, no
+   JavaScript." Keeping the template's default stack and just not writing any
+   `.ts` would have left the tooling (and its assumptions) in place; instead
+   I removed Vite, TypeScript and the TS linter outright and replaced `pnpm
+   build`/`pnpm dev` with a plain copy-to-`dist` script and a zero-dependency
+   static server, so there's nothing left in the repo that could reintroduce
+   JS by habit. I know it held because `spec/crit-1.test.ts` asserts zero
+   `.js` files and zero `<script>` elements in the built output, not just
+   that I didn't add any today
+   ([`81a906d`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-AuroraSunDev/commit/81a906d)).
 
-1. **what happened** --- the problem, or the thing the agent got wrong
-2. **what you did instead of the obvious thing** --- the call you made, and why
-   it beat the obvious one
-3. **how you knew it was right** --- the check you ran, the viewport you looked
-   at, what you read before accepting the diff
-4. **the citation** --- a commit or commit range, a `CLAUDE.md` change, a check
-   that went from red to green, a prompt paired with the commit it produced
+2. **My first plan was a single page; the actual spec ruled that out.**
+   Before writing any markup, I'd assumed one page would satisfy "keep it
+   dead simple." Reading the spec's fetched JSON rather than my own paraphrase
+   of it surfaced a line I'd have otherwise missed: "a handful of pages of
+   readable content, each reachable from the home page." That changed the
+   plan to four pages (home, the sentence, why it matters, guestbook) before
+   any HTML existed, rather than bolting pages on after the fact
+   ([`0f23104`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-AuroraSunDev/commit/0f23104)).
 
-Jobs 2 and 3 are the ones the repo can't tell a reader on its own, so they're
-where the marks are. The strongest moments are the ones where a correction
-landed in the **harness** rather than in another prompt --- a rule added to
-`CLAUDE.md`, a check wired up, an attempt thrown away: re-prompting until it
-passes is the routine case, and changing what the agent works against is the
-skilled one.
-
-Cite each moment as a link whose text is the commit hash or range and whose
-target is this repo's commit or compare URL, so a reader clicks straight to the
-evidence:
-
-- one commit: [`a1b2c3d`](https://github.com/YOUR-ORG/YOUR-REPO/commit/a1b2c3d)
-- a range:
-  [`a1b2c3d...e4f5a6b`](https://github.com/YOUR-ORG/YOUR-REPO/compare/a1b2c3d...e4f5a6b)
-
-To pair a prompt with the commit it produced, quote the prompt (curated, not a
-full transcript) next to the citation:
-
-> the prompt, verbatim
-
-Screenshots are welcome where one carries the verification better than a
-sentence does. Commit the file to this repo and link it with a **relative**
-path, which is what makes it render on GitHub: `![alt text](docs/before.png)`.
-Images don't count towards the word count and don't replace the citation.
-
-### A worked moment, for shape
-
-Delete this section along with the rest of the boilerplate --- it's here to show
-the four jobs in one paragraph, not to be imitated in content.
-
-> The date formatter kept coming back with `toLocaleDateString()` and no locale
-> argument, so the same build rendered differently on my machine and in CI. I'd
-> already re-prompted it twice, which fixed the line but not the habit, so the
-> third time I put the rule in `CLAUDE.md` instead
-> ([`3f9ac21`](https://github.com/YOUR-ORG/YOUR-REPO/commit/3f9ac21)) and added
-> a spec test that fails on a bare `toLocaleDateString`. That's what told me it
-> had actually taken: the test went red against the old code and green against
-> the new, and the next two features it wrote passed it without prompting
-> ([`3f9ac21...b7e0d14`](https://github.com/YOUR-ORG/YOUR-REPO/compare/3f9ac21...b7e0d14)).
+3. **Turned the spec's two checkable lines into a test instead of eyeballing
+   them.** "No JavaScript" and "each page reachable from home" are both easy
+   to get right once and silently break later. `spec/crit-1.test.ts` builds
+   `dist/` and asserts both directly: it walks every built page for `<script>`
+   tags and `.js` files, and checks the home page's `<a href>`s against the
+   full page list. Running `pnpm check` is how I know it's still true, not a
+   one-time visual check
+   ([`0f23104`](https://github.com/comp4020-agentic-coding-studio/comp4020-crit1-AuroraSunDev/commit/0f23104)).
 
 ## Before you ship
 
