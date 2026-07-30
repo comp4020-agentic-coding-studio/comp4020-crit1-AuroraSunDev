@@ -1,9 +1,11 @@
 # COMP4020 prototype
 
-This is your starter repo for a COMP4020 prototype: a static site written in
-HTML/CSS/TypeScript that builds to plain HTML/CSS/JS and deploys to GitHub
-Pages. The **deployed site is what gets marked** --- not this repo, and not "it
-works on my machine". It's marked live in Chrome against the deployed URL at two
+This is your starter repo for a COMP4020 prototype. C1's spec requires "Pure
+HTML/CSS, deployed straight to GitHub Pages", so this repo runs the **bare**
+stack option: no Vite, no TypeScript, no bundler. See
+[Stack: bare HTML/CSS](#stack-bare-htmlcss-no-bundler) below before assuming
+the template's defaults still apply. The **deployed site is what gets marked**
+--- not this repo, and not "it works on my machine". It's marked live in Chrome against the deployed URL at two
 viewports --- 1920×1080 (desktop) and 390×844 (phone) --- and both count in
 full, so make that artefact good at both and use the checks below to know
 whether it is.
@@ -48,12 +50,10 @@ While the repo is private (all week, until you ship) the CI jobs stay skipped
 anyway. They aren't hoops. Each is a different way of finding out something true
 about the site that you can't reliably see by looking at it.
 
-- **typecheck** --- `tsc --noEmit` runs first in `pnpm check`, so a type error
-  stops the roster before the build even starts. The types are extra
-  backpressure: a red here is the compiler telling you a claim in the code is
-  false.
-- **build** --- the site must build (`pnpm build`). A build failure means the
-  deployed site is broken or stale, so nothing else matters until this is green.
+- **build** --- `pnpm build` runs `scripts/build.mjs`, which copies the source
+  tree into `dist/` (no bundler, since there's no TypeScript or JS to bundle).
+  A build failure means the deployed site is broken or stale, so nothing else
+  matters until this is green.
 - **deploy / online** --- the live GitHub Pages URL must load and return the
   page you expect. An asset that 404s on the deployed URL counts as broken even
   if it loads locally.
@@ -61,8 +61,8 @@ about the site that you can't reliably see by looking at it.
   website, whatever the week's brief asks; the tests you write for the week's
   own spec run alongside it (any `spec/*.test.ts`). A failure names the contract
   you haven't met yet.
-- **lint** --- `stylelint` for CSS, `oxlint` for TypeScript. Flags code that's
-  wrong, fragile, or non-idiomatic. Read the rule it names.
+- **lint** --- `stylelint` for CSS. There's no `oxlint`/TypeScript step: the
+  site has no JS. Read the rule stylelint names.
 - **tests** --- any other tests you write, wherever you put them (co-located
   with your source is fine, not just `spec/`), must pass. Vitest picks up both
   this and the spec suite in one `vitest run`, the last step of `pnpm check`. A
@@ -91,24 +91,29 @@ in the course the spec will ask you to show how you tested both. When you do,
 read a green performance result honestly: it's a lab estimate from one run on a
 CI machine, not proof the site is fast for real users.
 
-## The stack is swappable
+## Stack: bare HTML/CSS, no bundler
 
-Out of the box this is plain HTML/CSS/TypeScript on Vite, and every `.html` file
-in the repo is a page: add pages, link them, and the build picks them up with no
-config. That's a default, not a rule (unless the week's spec says otherwise).
-You can swap in Astro or any other static generator, because nothing in CI names
-a tool --- the whole contract is:
+The template ships Vite + TypeScript by default; this repo removed both
+(`main.ts`, `vite.config.ts`, `tsconfig.json`, `.oxlintrc.json` are gone) to
+match the spec's "Pure HTML/CSS, deployed straight to GitHub Pages" line.
+Don't reintroduce a `<script>` tag or a `.ts`/`.js` file without checking the
+spec first --- Crit 1 explicitly rules out JavaScript.
 
-- `pnpm build` emits the complete site into `dist/`
-- the `package.json` scripts (`check`, `check:evidence`, `build`) keep working
-- whatever lands in `dist/` still passes the invariants in `spec/`
+- `pnpm build` runs `scripts/build.mjs`: a plain copy of every top-level file
+  or directory into `dist/`, except a hardcoded skip-list of source-only
+  files (`package.json`, `CLAUDE.md`, `spec/`, `scripts/`, etc.). Add a new
+  page by adding a `.html` file at the repo root and linking it --- no config
+  needed, same as the template's Vite setup, just without the bundler.
+- `pnpm dev` runs `scripts/dev-server.mjs`, a zero-dependency static server
+  (`node:http`), since there's no build-on-save step to watch for.
+- Every internal link uses a relative `.html` path (`./about.html`, not
+  `./about`), so the site works under GitHub Pages' subpath
+  (`…github.io/<repo>/`) without any base-path config.
 
-Two things bite in a swap. The deployed site lives under a path
-(`…github.io/<repo>/`), so configure your generator's base path --- this
-template's Vite config uses relative asset URLs to sidestep that, but most
-generators (Astro included) need `base` set explicitly, and getting it wrong
-looks fine locally while every asset 404s on the live URL. And commit the
-updated `pnpm-lock.yaml`: CI installs with `--frozen-lockfile`.
+The whole contract other stacks would still need to satisfy, if you ever swap
+again: `pnpm build` emits the complete site into `dist/`, `check`/
+`check:evidence`/`build` keep working, and whatever lands in `dist/` passes
+`spec/invariants.test.ts`.
 
 ## Your process is part of the mark
 
