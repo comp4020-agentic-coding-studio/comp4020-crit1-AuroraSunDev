@@ -153,6 +153,34 @@ means building legibly is part of building well.
 You don't need a name, a student number, or any identity file in the repo: we
 know whose repo it is. Spend the effort on the work.
 
+## Project editing conventions
+
+Standing conventions, expected to apply across COMP4020 deliverables:
+
+- Verify requirement-sensitive decisions against the current official course
+  source, using the handbook skill or published specification where
+  available, rather than relying on memory or an earlier paraphrase.
+- Follow the technology requirements of the *current* deliverable rather than
+  assuming one stack applies for the whole course --- check the brief before
+  assuming plain HTML/CSS, JavaScript, or any other stack is expected.
+- Follow the routing and deployment requirements of the current deliverable.
+  For static multi-page sites deployed under a GitHub Pages repository
+  subpath, use repository-safe relative links such as `./page.html`.
+- Prefer small, targeted edits over unrelated redesign --- change what the
+  task names, not what's around it.
+- Run `pnpm check` after relevant code or layout changes, before calling it
+  done.
+- Check layout changes at both graded viewports, 1920x1080 and 390x844 ---
+  both count in full.
+- Explain broad or destructive changes (deleting files, rewriting several
+  rules, restructuring pages) and wait for approval before applying them.
+
+Current-deliverable note, not a standing rule:
+
+- For this Crit 1 repository, preserve the current bare HTML/CSS stack
+  unless the official C1 brief or an approved change requires otherwise. Do
+  not generalise this restriction to later COMP4020 deliverables.
+
 ## This file is yours
 
 This CLAUDE.md is a starting point, not a fixed rulebook. As you learn what your
